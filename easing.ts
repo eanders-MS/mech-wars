@@ -46,11 +46,9 @@ function lerp(a: number, b: number, t: number): number {
 function flip(t: number): number {
     return 1 - t;
 }
-function spikef(t: number, fn: (t: number) => number): number {
-    if (t < 0.5) return fn(t / 0.5);
-    return fn(flip(t) / 0.5);
-}
 
+// Pre-defined curves for use with animation EaseFrame.
+// Choose an ease type and curve pair, like: `easing.easeIn(easing.curves.sine)`
 namespace mech.easing {
     export function linear(): (a: number, b: number, t: number) => number {
         return lerp;
@@ -71,8 +69,5 @@ namespace mech.easing {
             t = lerp(fn(t), flip(fn(flip(t))), t);
             return lerp(a, b, t);
         }
-    }
-    export function spike(fn: (t: number) => number): (a: number, b: number, t: number) => number {
-        return (a, b, t) => lerp(a, b, spikef(t, fn));
     }
 }

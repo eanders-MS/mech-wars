@@ -85,10 +85,12 @@ namespace mech {
 
     export class Vec2 {
         public dirty: boolean;
+        public readonly: boolean;
 
         //% blockCombine block="x" callInDebugger
         public get x() { return this.x_; }
         public set x(v: Fx8) {
+            if (this.readonly) throw "hey";
             this.x_ = v;
             this.dirty = true;
         }
@@ -96,6 +98,7 @@ namespace mech {
         //% blockCombine block="y" callInDebugger
         public get y() { return this.y_; }
         public set y(v: Fx8) {
+            if (this.readonly) throw "hey";
             this.y_ = v;
             this.dirty = true;
         }
