@@ -1,0 +1,37 @@
+{
+    "name": "Mech Wars!",
+    "description": "",
+    "dependencies": {
+        "device": "*"
+    },
+    "files": [
+        "main.ts",
+        "README.md",
+        "assets.json",
+        "images.g.jres",
+        "images.g.ts",
+        "math.ts",
+        "scene.ts",
+        "sprite.ts",
+        "physics.ts",
+        "constants.ts",
+        "input.ts",
+        "titleScene.ts",
+        "gfx.ts",
+        "affine.ts",
+        "animation.ts",
+        "easing.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "target": "1.4.41",
+        "targetId": "arcade"
+    },
+    "supportedTargets": [
+        "arcade"
+    ],
+    "preferredEditor": "tsprj",
+    "languageRestriction": "javascript-only"
+}
