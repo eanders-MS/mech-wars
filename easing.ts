@@ -40,18 +40,20 @@ namespace mech.easing.curves {
     }
 }
 
-function lerp(a: number, b: number, t: number): number {
-    return a + (b - a) * t;
-}
-function flip(t: number): number {
-    return 1 - t;
+namespace mech.easing.util {
+    export function lerp(a: number, b: number, t: number): number {
+        return a + (b - a) * t;
+    }
+    export function flip(t: number): number {
+        return 1 - t;
+    }
 }
 
 // Pre-defined curves for use with animation EaseFrame.
 // Choose an ease type and curve pair, like: `easing.easeIn(easing.curves.sine)`
 namespace mech.easing {
     export function linear(): (a: number, b: number, t: number) => number {
-        return lerp;
+        return util.lerp;
     }
     export function snap(pct: number): (a: number, b: number, t: number) => number {
         return (a, b, t) => {
@@ -59,15 +61,15 @@ namespace mech.easing {
         }
     }
     export function easeIn(fn: (t: number) => number): (a: number, b: number, t: number) => number {
-        return (a, b, t) => lerp(a, b, fn(t));
+        return (a, b, t) => util.lerp(a, b, fn(t));
     }
     export function easeOut(fn: (t: number) => number): (a: number, b: number, t: number) => number {
-        return (a, b, t) => lerp(a, b, flip(fn(flip(t))));
+        return (a, b, t) => util.lerp(a, b, util.flip(fn(util.flip(t))));
     }
     export function easeInOut(fn: (t: number) => number): (a: number, b: number, t: number) => number {
         return (a, b, t) => {
-            t = lerp(fn(t), flip(fn(flip(t))), t);
-            return lerp(a, b, t);
+            t = util.lerp(fn(t), util.flip(fn(util.flip(t))), t);
+            return util.lerp(a, b, t);
         }
     }
 }

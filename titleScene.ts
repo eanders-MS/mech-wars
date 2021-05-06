@@ -8,9 +8,11 @@ namespace mech {
         constructor() {
             super();
             this.color = 11;
+
             this.mechSprite = new ImageSprite(this, "imgTitleMech");
             this.mechSprite.xfrm.localPos.x = Fx8(Screen.SCREEN_LEFT - (this.mechSprite.img.width >> 1));
             this.mechSprite.xfrm.localPos.y = Fx8(Screen.SCREEN_TOP + (this.mechSprite.img.height >> 1) + 5);
+
             this.warsSprite = new ImageSprite(this, "imgTitleWars");
             this.warsSprite.xfrm.localPos.x = Fx8(Screen.SCREEN_RIGHT + (this.warsSprite.img.width >> 1));
             this.warsSprite.xfrm.localPos.y = Fx8(Fx.toFloat(this.mechSprite.xfrm.localPos.y) + this.mechSprite.img.height + 2);
