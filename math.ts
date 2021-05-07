@@ -140,6 +140,18 @@ namespace mech {
             return Fx8(Math.sqrt(this.magSqF()));
         }
 
+        public floor(): this {
+            this.x = fx.floor(this.x);
+            this.y = fx.floor(this.y);
+            return this;
+        }
+
+        public add(v: Vec2): this {
+            this.x = Fx.add(this.x, v.x);
+            this.y = Fx.add(this.y, v.y);
+            return this;
+        }
+
         public static ZeroToRef(ref: Vec2): Vec2 {
             return ref.set(Fx.zeroFx8, Fx.zeroFx8);
         }

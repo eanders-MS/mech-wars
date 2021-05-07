@@ -100,7 +100,9 @@ namespace mech {
         private frames: EaseFrame[];
         private frameIdx: number;
         private loop: boolean;
-        private playing: boolean;
+        private playing_: boolean;
+
+        public get playing() { return this.playing_; }
 
         constructor(private callback: (value: number | Vec2, tag?: string) => void, opts?: {
             loop?: boolean
@@ -118,13 +120,13 @@ namespace mech {
             this.frameIdx = 0;
             const currFrame = this.currFrame();
             if (currFrame) {
-                this.playing = true;
+                this.playing_ = true;
                 this.initFrame(initialValue);
             }
         }
 
         public stop() {
-            this.playing = false;
+            this.playing_ = false;
         }
 
         public update() {
@@ -163,6 +165,8 @@ namespace mech {
             if (currFrame) {
                 currFrame.step();
                 this.callback(currFrame.state.currValue, currFrame.opts.tag);
+            } else {
+                this.playing_ = false;
             }
         }
 

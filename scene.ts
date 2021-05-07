@@ -15,14 +15,14 @@ namespace mech {
     }
 
     export class Scene {
+        public static SCENE_OFFSET = Vec2.N(Screen.SCREEN_HALF_WIDTH, Screen.SCREEN_HALF_HEIGHT);
+        private static image_: Image;
         private xfrm_: Affine;
-        private image_: Image;
         private color_: number;
 
+        public static get image() { return Scene.image_; }
         //% blockCombine block="xfrm" callInDebugger
         public get xfrm() { return this.xfrm_; }
-        //% blockCombine block="image" callInDebugger
-        public get image() { return this.image_; }
         //% blockCombine block="color" callInDebugger
         public get color() { return this.color_; }
         public set color(v) { this.color_ = v; }
@@ -30,7 +30,7 @@ namespace mech {
         constructor() {
             this.xfrm_ = new Affine();
             this.color_ = 12;
-            this.image_ = image.create(screen.width, screen.height);
+            if (!Scene.image_) { Scene.image_ = image.create(screen.width, screen.height); }
         }
 
         /* virtual */ update(dt: number) {
@@ -70,10 +70,10 @@ namespace mech {
                 this.update(control.eventContext().deltaTime); 
             });
             control.eventContext().registerFrameHandler(RENDER_PRIORITY, () => {
-                this.image_.fill(0);
+                Scene.image_.fill(0);
                 this.draw();
                 screen.fill(this.color_);
-                screen.drawTransparentImage(this.image_, 0, 0);
+                screen.drawTransparentImage(Scene.image_, 0, 0);
             });
             control.eventContext().registerFrameHandler(SCREEN_PRIORITY, control.__screen.update);
         }

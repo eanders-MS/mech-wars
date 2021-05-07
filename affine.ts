@@ -112,5 +112,13 @@ namespace mech {
                 }
             }
         }
+
+        public transformToRef(v: Vec2, ref: Vec2): Vec2 {
+            // Yes, I know I *could* use a 3x3 matrix for this.
+            Vec2.ScaleToRef(v, this.worldScl, ref);
+            Vec2.RotateToRef(ref, this.worldRot, ref);
+            Vec2.TranslateToRef(ref, this.worldPos, ref);
+            return ref;
+        }
     }
 }

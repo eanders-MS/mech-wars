@@ -20,7 +20,8 @@
         "gfx.ts",
         "affine.ts",
         "animation.ts",
-        "easing.ts"
+        "easing.ts",
+        "vert.ts"
     ],
     "testFiles": [
         "test.ts"
