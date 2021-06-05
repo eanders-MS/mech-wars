@@ -55,34 +55,28 @@ namespace mech.gfx {
         const lPosStep = Vec2.DivToRef(lPosDiff, vh, new Vec2());
         const rPosStep = Vec2.DivToRef(rPosDiff, vh, new Vec2());
         const lUvDiff = Vec2.SubToRef(L1.uv, L0.uv, new Vec2());
-        //const rUvDiff = Vec2.SubToRef(R1.uv, R0.uv, new Vec2());
+        const rUvDiff = Vec2.SubToRef(R1.uv, R0.uv, new Vec2());
         const lUvStep = Vec2.DivToRef(lUvDiff, vh, new Vec2());
-        //const rUvStep = Vec2.DivToRef(rUvDiff, vh, new Vec2());
-        const xDiffHorz = Fx.sub(T1.pos.x, T0.pos.x);
-        const uvDiffHorz = Vec2.SubToRef(T1.uv, T0.uv, new Vec2());
-        const uvStepHorz = Vec2.DivToRef(uvDiffHorz, new Vec2(xDiffHorz, xDiffHorz), new Vec2());
+        const rUvStep = Vec2.DivToRef(rUvDiff, vh, new Vec2());
 
         for (let y = L0.pos.y; y < L1.pos.y; y = Fx.add(y, Fx.oneFx8)) {
             const iy = Fx.toInt(y);
             const uv = L.uv.clone();
-            for (let x = L.pos.x; x < R.pos.x; x = Fx.add(x, Fx.oneFx8)) {
-                const ix = Fx.toInt(x);
-                const cc = _sampleTexture(tex, uv);
-                target.setPixel(ix, iy, cc);
-                Vec2.AddToRef(uv, uvStepHorz, uv);
+            const xDiff = Fx.sub(R.pos.x, L.pos.x);
+            if (xDiff) {
+                const uvDiff = Vec2.SubToRef(R.uv, L.uv, new Vec2());
+                const uvStep = Vec2.DivToRef(uvDiff, new Vec2(xDiff, xDiff), new Vec2());
+                for (let x = L.pos.x; x < R.pos.x; x = Fx.add(x, Fx.oneFx8)) {
+                    const ix = Fx.toInt(x);
+                    const cc = _sampleTexture(tex, uv);
+                    target.setPixel(ix, iy, cc);
+                    Vec2.AddToRef(uv, uvStep, uv);
+                }
             }
-
-            //const lx = Fx.toInt(L.pos.x);
-            //const ly = Fx.toInt(L.pos.y);
-            //const rx = Fx.toInt(R.pos.x);
-            //const ry = Fx.toInt(R.pos.y);
-            //target.setPixel(lx, ly, 15);
-            //target.setPixel(rx, ry, 15);
-
             Vec2.AddToRef(L.pos, lPosStep, L.pos);
             Vec2.AddToRef(R.pos, rPosStep, R.pos);
             Vec2.AddToRef(L.uv, lUvStep, L.uv);
-            //Vec2.AddToRef(R.uv, rUvStep, R.uv);
+            Vec2.AddToRef(R.uv, rUvStep, R.uv);
 
         }
         target.drawLine(Fx.toInt(A.pos.x), Fx.toInt(A.pos.y), Fx.toInt(B.pos.x), Fx.toInt(B.pos.y), 15);
@@ -170,18 +164,21 @@ namespace mech.gfx {
             // Find T's uv coords.
             ///
             // Find how far T is along A-S, as a percentage.
-            const uvPct =
-                Vec2.DivToRef(
-                    Vec2.SubToRef(T.pos, A.pos, new Vec2()),
-                    Vec2.SubToRef(S.pos, A.pos, new Vec2()),
-                    new Vec2());
+            const TA = Vec2.SubToRef(T.pos, A.pos, new Vec2());
+            const SA = Vec2.SubToRef(S.pos, A.pos, new Vec2());
+            const TAm = TA.mag();
+            const SAm = SA.mag();
+            const pct = Fx.div(TAm, SAm);
             // Calc T's uv as a percentage of the total distance.
-            T.uv =
-                Vec2.MulToRef(
-                    Vec2.SubToRef(S.uv, A.uv, new Vec2()),
-                    uvPct,
-                    new Vec2());
-
+            const SAuv = Vec2.SubToRef(S.uv, A.uv, new Vec2());
+            const puv = Vec2.ScaleToRef(
+                SAuv,
+                pct,
+                new Vec2());
+            T.uv = Vec2.AddToRef(
+                puv,
+                A.uv,
+                new Vec2());
             ///
             // Draw the triangles.
             ///

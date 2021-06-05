@@ -24,7 +24,10 @@ namespace mech {
         public static mod(v: Fx8, q: Fx8): Fx8 {
             // lazy implementation
             return Fx8(Fx.toFloat(v) % Fx.toFloat(q));
-
+        }
+        public static sqrt(v: Fx8): Fx8 {
+            // lazy implementation
+            return Fx8(Math.sqrt(Fx.toFloat(v)));
         }
         public static random(): Fx8 {
             return Fx8(Math.random());
@@ -267,6 +270,12 @@ namespace mech {
         public static InvToRef(s: Fx8, v: Vec2, ref: Vec2): Vec2 {
             ref.x = v.x !== Fx.zeroFx8 ? Fx.div(s, v.x) : Fx.zeroFx8;
             ref.y = v.y !== Fx.zeroFx8 ? Fx.div(s, v.y) : Fx.zeroFx8;
+            return ref;
+        }
+
+        public static SignToRef(v: Vec2, ref: Vec2): Vec2 {
+            ref.x = fx.sign(v.x);
+            ref.y = fx.sign(v.y);
             return ref;
         }
 
