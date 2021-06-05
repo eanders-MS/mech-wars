@@ -21,13 +21,14 @@
         "affine.ts",
         "animation.ts",
         "easing.ts",
-        "vert.ts"
+        "vert.ts",
+        "gfxf.ts"
     ],
     "testFiles": [
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.4.41",
+        "target": "1.5.22",
         "targetId": "arcade"
     },
     "supportedTargets": [

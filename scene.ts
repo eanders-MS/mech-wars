@@ -1,18 +1,22 @@
+namespace mech.Screen {
+    export const SCREEN_WIDTH = screen.width;
+    export const SCREEN_HEIGHT = screen.height;
+    export const SCREEN_WIDTH_FX8 = Fx8(screen.width);
+    export const SCREEN_HEIGHT_FX8 = Fx8(screen.height);
+    export const SCREEN_HALF_WIDTH = screen.width >> 1;
+    export const SCREEN_HALF_HEIGHT = screen.height >> 1;
+    export const SCREEN_HALF_SIZE = Vec2.N(Screen.SCREEN_HALF_WIDTH, Screen.SCREEN_HALF_HEIGHT);
+    export const SCREEN_LEFT = -(screen.width >> 1);
+    export const SCREEN_RIGHT = screen.width >> 1;
+    export const SCREEN_TOP = -(screen.height >> 1);
+    export const SCREEN_BOTTOM = screen.height >> 1;
+}
+
 namespace mech {
     const INPUT_PRIORITY = 10;
     const UPDATE_PRIORITY = 20;
     const RENDER_PRIORITY = 30;
     const SCREEN_PRIORITY = 100;
-
-    export class Screen {
-        public static SCREEN_HALF_WIDTH = screen.width >> 1;
-        public static SCREEN_HALF_HEIGHT = screen.height >> 1;
-        public static SCREEN_HALF_SIZE = Vec2.N(Screen.SCREEN_HALF_WIDTH, Screen.SCREEN_HALF_HEIGHT);
-        public static SCREEN_LEFT = -(screen.width >> 1);
-        public static SCREEN_RIGHT = screen.width >> 1;
-        public static SCREEN_TOP = -(screen.height >> 1);
-        public static SCREEN_BOTTOM = screen.height >> 1;
-    }
 
     export class Scene {
         public static SCENE_OFFSET = Vec2.N(Screen.SCREEN_HALF_WIDTH, Screen.SCREEN_HALF_HEIGHT);

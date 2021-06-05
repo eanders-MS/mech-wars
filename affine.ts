@@ -1,4 +1,8 @@
 namespace mech {
+    /**
+     * An `Affine` is a set of transforms to be performed on a Vec2: translation, rotation, and scale.
+     * An Affine can have a parent tranform.
+     */
     export class Affine {
         private localPos_: Vec2;
         private localRot_: number;
