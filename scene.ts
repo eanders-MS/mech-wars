@@ -1,21 +1,32 @@
 namespace mech.Screen {
     export const SCREEN_WIDTH = screen.width;
     export const SCREEN_HEIGHT = screen.height;
-    export const SCREEN_WIDTH_FX8 = Fx8(screen.width);
-    export const SCREEN_HEIGHT_FX8 = Fx8(screen.height);
     export const SCREEN_HALF_WIDTH = screen.width >> 1;
     export const SCREEN_HALF_HEIGHT = screen.height >> 1;
     export const SCREEN_HALF_SIZE = Vec2.N(Screen.SCREEN_HALF_WIDTH, Screen.SCREEN_HALF_HEIGHT);
-    export const SCREEN_LEFT = -(screen.width >> 1);
-    export const SCREEN_RIGHT = screen.width >> 1;
-    export const SCREEN_TOP = -(screen.height >> 1);
-    export const SCREEN_BOTTOM = screen.height >> 1;
+    export const SCREEN_LEFT = -Screen.SCREEN_HALF_WIDTH;
+    export const SCREEN_RIGHT = Screen.SCREEN_HALF_WIDTH;
+    export const SCREEN_TOP = -Screen.SCREEN_HALF_HEIGHT;
+    export const SCREEN_BOTTOM = Screen.SCREEN_HALF_HEIGHT;
+    export const SCREEN_WIDTH_FX8 = Fx8(Screen.SCREEN_WIDTH);
+    export const SCREEN_HEIGHT_FX8 = Fx8(Screen.SCREEN_HEIGHT);
+    export const SCREEN_LEFT_FX8 = Fx8(Screen.SCREEN_LEFT);
+    export const SCREEN_TOP_FX8 = Fx8(Screen.SCREEN_TOP);
+    export const SCREEN_RIGHT_FX8 = Fx8(Screen.SCREEN_RIGHT);
+    export const SCREEN_BOTTOM_FX8 = Fx8(Screen.SCREEN_BOTTOM);
+    export const SCREEN_BOUNDS = Bounds.Create({
+        left: Screen.SCREEN_LEFT_FX8,
+        top: Screen.SCREEN_TOP_FX8,
+        width: Screen.SCREEN_WIDTH_FX8,
+        height: Screen.SCREEN_HEIGHT_FX8
+    });
 }
 
 namespace mech {
     const INPUT_PRIORITY = 10;
     const UPDATE_PRIORITY = 20;
-    const RENDER_PRIORITY = 30;
+    const DRAW_PRIORITY = 30;
+    const GPU_PRIORITY = 90;
     const SCREEN_PRIORITY = 100;
 
     export class Scene {
@@ -73,9 +84,12 @@ namespace mech {
             control.eventContext().registerFrameHandler(UPDATE_PRIORITY, () => {
                 this.update(control.eventContext().deltaTime); 
             });
-            control.eventContext().registerFrameHandler(RENDER_PRIORITY, () => {
-                Scene.image_.fill(0);
+            control.eventContext().registerFrameHandler(DRAW_PRIORITY, () => {
                 this.draw();
+            });
+            control.eventContext().registerFrameHandler(GPU_PRIORITY, () => {
+                Scene.image_.fill(0);
+                gpu.exec();
                 screen.fill(this.color_);
                 screen.drawTransparentImage(Scene.image_, 0, 0);
             });

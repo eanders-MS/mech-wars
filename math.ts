@@ -39,7 +39,7 @@ namespace mech {
             return Fx8(Math.randomRange(min, max));
         }
     }
-    
+
     // The number of angle steps in a full circle.
     const NUM_ANGLE_SLICES = 360;
     const NUM_ANGLE_SLICES_OVER_2 = NUM_ANGLE_SLICES >> 1;
@@ -286,200 +286,40 @@ namespace mech {
         }
 
         public static Dot(a: Vec2, b: Vec2): Fx8 {
-            return Fx.sub(Fx.mul(a.x, b.y), Fx.mul(a.y, b.x));
-        }
-     }
-
-    export class Vec2F {
-        public dirty: boolean;
-        public readonly: boolean;
-
-        //% blockCombine block="x" callInDebugger
-        public get x() { return this.x_; }
-        public set x(v) {
-            if (this.readonly) throw "hey";
-            this.x_ = v;
-            this.dirty = true;
-        }
-        //% blockCombine block="y" callInDebugger
-        public get y() { return this.y_; }
-        public set y(v) {
-            if (this.readonly) throw "hey";
-            this.y_ = v;
-            this.dirty = true;
+            return Fx.add(
+                Fx.mul(a.x, b.y),
+                Fx.mul(a.y, b.x));
         }
 
-        //% blockCombine block="u" callInDebugger
-        public get u() { return this.x_; }
-        public set u(n) { this.x = n; }
-        //% blockCombine block="v" callInDebugger
-        public get v() { return this.y_; }
-        public set v(n) { this.y = n; }
-
-        constructor(public x_ = 0, public y_ = 0) {
+        public static Cross(a: Vec2, b: Vec2, c: Vec2): Fx8 {
+            return Fx.sub(
+                Fx.mul(
+                    Fx.sub(b.x, a.x),
+                    Fx.neg(Fx.sub(c.y, a.y)
+                    )),
+                Fx.mul(
+                    Fx.neg(Fx.sub(b.y, a.y)),
+                    Fx.sub(c.x, a.x)));
         }
 
-        public clone(): Vec2F {
-            return new Vec2F(this.x, this.y);
-        }
-
-        public copyFrom(v: Vec2F): this {
-            this.x = v.x;
-            this.y = v.y;
-            return this;
-        }
-
-        public set(x: number, y: number): this {
-            this.x = x;
-            this.y = y;
-            return this;
-        }
-
-        public setF(x: number, y: number): this {
-            this.x = x;
-            this.y = y;
-            return this;
-        }
-
-        public magSq(): number {
-            return this.x * this.x + this.y * this.y;
-        }
-
-        public magSqF(): number {
-            return this.magSq();
-        }
-
-        public mag(): number {
-            return Math.sqrt(this.magSqF());
-        }
-
-        public floor(): this {
-            this.x = Math.floor(this.x);
-            this.y = Math.floor(this.y);
-            return this;
-        }
-
-        public add(v: Vec2F): this {
-            this.x = this.x + v.x;
-            this.y = this.y + v.y;
-            return this;
-        }
-
-        public invSlope(): number {
-            if (this.y === 0) { return 1 * Math.sign(this.y); }
-            if (this.x === 0) { return 0; }
-            return this.x / this.y;
-        }
-
-        public static ZeroToRef(ref: Vec2F): Vec2F {
-            return ref.set(0, 0);
-        }
-
-        public static N(x: number, y: number): Vec2F {
-            return new Vec2F(x, y);
-        }
-
-        public static RotateToRef(v: Vec2F, angle: number, ref: Vec2F): Vec2F {
-            angle = angle * Math.PI / 180;
-            const s = Math.sin(angle);
-            const c = Math.cos(angle);
-            const xp = v.x * c - v.y * s;
-            const yp = v.x * s + v.y * c;
-            ref.x = xp;
-            ref.y = yp;
-            return ref;
-        }
-
-        public static TranslateToRef(v: Vec2F, p: Vec2F, ref: Vec2F): Vec2F {
-            ref.x = v.x + p.x;
-            ref.y = v.y + p.y;
-            return ref;
-        }
-
-        public static ScaleToRef(v: Vec2F, scale: number, ref: Vec2F): Vec2F {
-            ref.x = v.x * scale;
-            ref.y = v.y * scale;
-            return ref;
-        }
-
-        public static FloorToRef(v: Vec2F, ref: Vec2F): Vec2F {
-            ref.x = Math.floor(v.x);
-            ref.y = Math.floor(v.y);
-            return ref;
-        }
-
-        public static SetLengthToRef(v: Vec2F, len: number, ref: Vec2F): Vec2F {
-            Vec2F.NormalizeToRef(v, ref);
-            Vec2F.ScaleToRef(ref, len, ref);
-            return ref;
-        }
-
-        public static NormalizeToRef(v: Vec2F, ref: Vec2F): Vec2F {
-            const lenSq = v.magSqF();
-            if (lenSq !== 0) {
-                const len = Math.sqrt(lenSq);
-                ref.x = v.x / len;
-                ref.y = v.y / len;
+        public static MinOfToRef(arr: Vec2[], ref: Vec2): Vec2 {
+            ref.x = Fx8(10000);
+            ref.y = Fx8(10000);
+            for (const v of arr) {
+                if (v.x < ref.x) { ref.x = v.x; }
+                if (v.y < ref.y) { ref.y = v.y; }
             }
             return ref;
         }
 
-        public static MaxToRef(a: Vec2F, b: Vec2F, ref: Vec2F): Vec2F {
-            ref.x = Math.max(a.x, b.x);
-            ref.y = Math.max(a.y, b.y);
+        public static MaxOfToRef(arr: Vec2[], ref: Vec2): Vec2 {
+            ref.x = Fx8(-10000);
+            ref.y = Fx8(-10000);
+            for (const v of arr) {
+                if (v.x > ref.x) { ref.x = v.x; }
+                if (v.y > ref.y) { ref.y = v.y; }
+            }
             return ref;
-        }
-
-        public static MinToRef(a: Vec2F, b: Vec2F, ref: Vec2F): Vec2F {
-            ref.x = Math.min(a.x, b.x);
-            ref.y = Math.min(a.y, b.y);
-            return ref;
-        }
-
-        public static SubToRef(a: Vec2F, b: Vec2F, ref: Vec2F): Vec2F {
-            ref.x = a.x - b.x;
-            ref.y = a.y - b.y;
-            return ref;
-        }
-
-        public static AddToRef(a: Vec2F, b: Vec2F, ref: Vec2F): Vec2F {
-            ref.x = a.x + b.x;
-            ref.y = a.y + b.y;
-            return ref;
-        }
-
-        public static MulToRef(a: Vec2F, b: Vec2F, ref: Vec2F): Vec2F {
-            ref.x = a.x * b.x;
-            ref.y = a.y * b.y;
-            return ref;
-        }
-
-        public static DivToRef(a: Vec2F, b: Vec2F, ref: Vec2F): Vec2F {
-            ref.x = b.x !== 0 ? a.x / b.x : 0;
-            ref.y = b.y !== 0 ? a.y / b.y : 0;
-            return ref;
-        }
-
-        public static AbsToRef(v: Vec2F, ref: Vec2F): Vec2F {
-            ref.x = Math.abs(v.x);
-            ref.y = Math.abs(v.y);
-            return ref;
-        }
-
-        public static InvToRef(s: number, v: Vec2F, ref: Vec2F): Vec2F {
-            ref.x = v.x !== 0 ? s / v.x : 0;
-            ref.y = v.y !== 0 ? s / v.y : 0;
-            return ref;
-        }
-
-        public static RandomRangeToRef(xmin: number, xmax: number, ymin: number, ymax: number, ref: Vec2F): Vec2F {
-            ref.x = Math.randomRange(xmin, xmax);
-            ref.y = Math.randomRange(ymin, ymax);
-            return ref;
-        }
-
-        public static Dot(a: Vec2F, b: Vec2F): number {
-            return a.x * b.y - a.y * b.x;
         }
     }
 
@@ -529,46 +369,6 @@ namespace mech {
                 //const t = Vec2.Dot(a, u2);
 
                 return new LineIntersectionResult(ELineIntersectionResult.INTERSECTION_INSIDE_SEGMENT, p);
-            }
-        }
-    }
-
-    export class LineIntersectionResultF {
-        constructor(
-            public status: ELineIntersectionResult,
-            public pos: Vec2F = null) { }
-    }
-
-    export class LineSegmentF {
-        constructor(public A: Vec2F = null, public B: Vec2F = null, ref = false) {
-            if (A && !ref) { this.A = this.A.clone(); }
-            if (B && !ref) { this.B = this.B.clone(); }
-            if (!this.A) { this.A = new Vec2F() }
-            if (!this.B) { this.B = new Vec2F() }
-        }
-
-        public static CalcIntersection(N: LineSegmentF, M: LineSegmentF): LineIntersectionResultF {
-            const a = Vec2F.SubToRef(N.B, N.A, new Vec2F());
-            const b = Vec2F.SubToRef(M.B, M.A, new Vec2F());
-
-            if (Vec2F.Dot(a, b) === 0) {
-                // A and B are parallel
-
-                // TODO: calc coincident type
-
-                return new LineIntersectionResultF(ELineIntersectionResult.TRUE_PARALLEL);
-            } else {
-                const u1 = Vec2F.SubToRef(M.A, N.A, new Vec2F());
-                const s = Vec2F.Dot(b, u1) / Vec2F.Dot(b, a);
-                const p = new Vec2F();
-                Vec2F.AddToRef(N.A, Vec2F.ScaleToRef(a, s, p), p);
-
-                // TODO: calc intersection type
-
-                //const u2 = Vec2.SubToRef(a0, b0, new Vec2());
-                //const t = Vec2.Dot(a, u2);
-
-                return new LineIntersectionResultF(ELineIntersectionResult.INTERSECTION_INSIDE_SEGMENT, p);
             }
         }
     }

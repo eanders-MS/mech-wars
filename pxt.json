@@ -17,12 +17,13 @@
         "constants.ts",
         "input.ts",
         "titleScene.ts",
-        "gfx.ts",
         "affine.ts",
         "animation.ts",
         "easing.ts",
         "vert.ts",
-        "gfxf.ts"
+        "gpu.ts",
+        "qtree.ts",
+        "bounds.ts"
     ],
     "testFiles": [
         "test.ts"
