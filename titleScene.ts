@@ -10,8 +10,8 @@ namespace mech {
             this.color = 11;
 
             this.mechSprite = new ImageSprite(this, "imgTitleMech");
-            //this.mechSprite.xfrm.localPos.x = Fx8(Screen.SCREEN_LEFT - (this.mechSprite.img.width >> 1));
-            //this.mechSprite.xfrm.localPos.y = Fx8(Screen.SCREEN_TOP + (this.mechSprite.img.height >> 1) + 5);
+            this.mechSprite.xfrm.localPos.x = Fx8(Screen.SCREEN_LEFT - (this.mechSprite.img.width >> 1));
+            this.mechSprite.xfrm.localPos.y = Fx8(Screen.SCREEN_TOP + (this.mechSprite.img.height >> 1) + 5);
 
             this.warsSprite = new ImageSprite(this, "imgTitleWars");
             this.warsSprite.xfrm.localPos.x = Fx8(Screen.SCREEN_RIGHT + (this.warsSprite.img.width >> 1));
@@ -33,8 +33,7 @@ namespace mech {
                 curve: easing.easeIn(easing.curves.sq5)
             }));
 
-            //this.mechAnimIn.start();
-            this.mechSprite.xfrm.localRot = 10;
+            this.mechAnimIn.start();
             setTimeout(() => this.warsAnimIn.start(), 250);
         }
 
@@ -49,12 +48,11 @@ namespace mech {
         /* override */ update(dt: number) {
             this.mechAnimIn.update();
             this.warsAnimIn.update();
-            this.mechSprite.xfrm.localRot += 1;
         }
 
         /* override */ draw() {
             this.mechSprite.draw();
-            //this.warsSprite.draw();
+            this.warsSprite.draw();
         }
     }
 }

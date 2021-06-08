@@ -23,24 +23,25 @@ namespace mech {
         }
     }
 
-    const IMAGE_SPRITE_INDICES = [0, 3, 2, 1];
+    const IMAGE_SPRITE_TRI0_INDICES = [0, 3, 2];
+    const IMAGE_SPRITE_TRI1_INDICES = [2, 1, 0];
 
     export class ImageSprite extends Sprite {
         img: Image;
-        pts: Vec2[];
         verts: Vertex[];
-        cmd: gpu.DrawTexturedQuad;
+        tri0: gpu.DrawTexturedTri;
+        tri1: gpu.DrawTexturedTri;
 
         /**
          * Quad layout:
-         * (i:0, uv:0,0)   (i:1, uv:1,0)
-         *   +---------------+
-         *   |               |
-         *   |               |
-         *   |               |
-         *   |               |
-         *   +---------------+
-         * (i:3, uv:0,1)    (i:2, uv:1,1)
+         * (i:0,uv:0,0) (i:1,uv:1,0)
+         *   +------------+
+         *   |\__         |
+         *   |   \__      |
+         *   |      \__   |
+         *   |         \__|
+         *   +------------+
+         * (i:3,uv:0,1) (i:2,uv:1,1)
          */
 
         constructor(scene: Scene, imgName: string) {
@@ -50,32 +51,37 @@ namespace mech {
             const right = Fx8(this.img.width >> 1);
             const top = Fx8(-(this.img.height >> 1));
             const bottom = Fx8(this.img.height >> 1);
-            this.pts = [
+            const pts = [
                 new Vec2(left,  top),
                 new Vec2(right, top),
                 new Vec2(right, bottom),
                 new Vec2(left,  bottom),
             ];
-            this.verts = [
-                new Vertex(this.pts[0].clone(), new Vec2(Fx.zeroFx8, Fx.zeroFx8), true),
-                new Vertex(this.pts[1].clone(), new Vec2(Fx.oneFx8, Fx.zeroFx8), true),
-                new Vertex(this.pts[2].clone(), new Vec2(Fx.oneFx8, Fx.oneFx8), true),
-                new Vertex(this.pts[3].clone(), new Vec2(Fx.zeroFx8, Fx.oneFx8), true),
+            const uvs = [
+                new Vec2(Fx.zeroFx8, Fx.zeroFx8),
+                new Vec2(Fx.oneFx8, Fx.zeroFx8),
+                new Vec2(Fx.oneFx8, Fx.oneFx8),
+                new Vec2(Fx.zeroFx8, Fx.oneFx8),
             ];
-            this.cmd = new gpu.DrawTexturedQuad(this.verts, IMAGE_SPRITE_INDICES, this.img);
+            this.verts = [
+                new Vertex(pts[0], uvs[0], true),
+                new Vertex(pts[1], uvs[1], true),
+                new Vertex(pts[2], uvs[2], true),
+                new Vertex(pts[3], uvs[3], true),
+            ];
+            const vs = new gpu.BasicVertexShader(this.verts);
+            this.tri0 = new gpu.DrawTexturedTri(vs, IMAGE_SPRITE_TRI0_INDICES, this.img);
+            this.tri1 = new gpu.DrawTexturedTri(vs, IMAGE_SPRITE_TRI1_INDICES, this.img);
         }
 
         /* override */ update() {
-            // TODO: Set transform matrix on the draw cmd.
         }
 
         /* override */ draw() {
-            // TODO: Transform should be done on the "gpu", using a transform matrix.
-            this.xfrm.transformToRef(this.pts[0], this.verts[0].pos);
-            this.xfrm.transformToRef(this.pts[1], this.verts[1].pos);
-            this.xfrm.transformToRef(this.pts[2], this.verts[2].pos);
-            this.xfrm.transformToRef(this.pts[3], this.verts[3].pos);
-            this.cmd.enqueue();
+            this.tri0.xfrm = this.xfrm;
+            this.tri1.xfrm = this.xfrm;
+            this.tri0.enqueue();
+            this.tri1.enqueue();
         }
     }
 }

@@ -1,25 +1,19 @@
 namespace mech.Screen {
     export const SCREEN_WIDTH = screen.width;
     export const SCREEN_HEIGHT = screen.height;
-    export const SCREEN_HALF_WIDTH = screen.width >> 1;
-    export const SCREEN_HALF_HEIGHT = screen.height >> 1;
+    export const SCREEN_HALF_WIDTH = Screen.SCREEN_WIDTH >> 1;
+    export const SCREEN_HALF_HEIGHT = Screen.SCREEN_HEIGHT >> 1;
     export const SCREEN_HALF_SIZE = Vec2.N(Screen.SCREEN_HALF_WIDTH, Screen.SCREEN_HALF_HEIGHT);
     export const SCREEN_LEFT = -Screen.SCREEN_HALF_WIDTH;
     export const SCREEN_RIGHT = Screen.SCREEN_HALF_WIDTH;
     export const SCREEN_TOP = -Screen.SCREEN_HALF_HEIGHT;
     export const SCREEN_BOTTOM = Screen.SCREEN_HALF_HEIGHT;
+    export const SCREEN_LEFT_FX8 = Fx8(Screen.SCREEN_LEFT);
+    export const SCREEN_RIGHT_FX8 = Fx8(Screen.SCREEN_RIGHT);
+    export const SCREEN_TOP_FX8 = Fx8(Screen.SCREEN_TOP);
+    export const SCREEN_BOTTOM_FX8 = Fx8(Screen.SCREEN_BOTTOM);
     export const SCREEN_WIDTH_FX8 = Fx8(Screen.SCREEN_WIDTH);
     export const SCREEN_HEIGHT_FX8 = Fx8(Screen.SCREEN_HEIGHT);
-    export const SCREEN_LEFT_FX8 = Fx8(Screen.SCREEN_LEFT);
-    export const SCREEN_TOP_FX8 = Fx8(Screen.SCREEN_TOP);
-    export const SCREEN_RIGHT_FX8 = Fx8(Screen.SCREEN_RIGHT);
-    export const SCREEN_BOTTOM_FX8 = Fx8(Screen.SCREEN_BOTTOM);
-    export const SCREEN_BOUNDS = Bounds.Create({
-        left: Screen.SCREEN_LEFT_FX8,
-        top: Screen.SCREEN_TOP_FX8,
-        width: Screen.SCREEN_WIDTH_FX8,
-        height: Screen.SCREEN_HEIGHT_FX8
-    });
 }
 
 namespace mech {
@@ -31,11 +25,10 @@ namespace mech {
 
     export class Scene {
         public static SCENE_OFFSET = Vec2.N(Screen.SCREEN_HALF_WIDTH, Screen.SCREEN_HALF_HEIGHT);
-        private static image_: Image;
         private xfrm_: Affine;
         private color_: number;
 
-        public static get image() { return Scene.image_; }
+        //public static get image() { return Scene.image_; }
         //% blockCombine block="xfrm" callInDebugger
         public get xfrm() { return this.xfrm_; }
         //% blockCombine block="color" callInDebugger
@@ -45,7 +38,6 @@ namespace mech {
         constructor() {
             this.xfrm_ = new Affine();
             this.color_ = 12;
-            if (!Scene.image_) { Scene.image_ = image.create(screen.width, screen.height); }
         }
 
         /* virtual */ update(dt: number) {
@@ -88,10 +80,8 @@ namespace mech {
                 this.draw();
             });
             control.eventContext().registerFrameHandler(GPU_PRIORITY, () => {
-                Scene.image_.fill(0);
-                gpu.exec();
                 screen.fill(this.color_);
-                screen.drawTransparentImage(Scene.image_, 0, 0);
+                gpu.exec();
             });
             control.eventContext().registerFrameHandler(SCREEN_PRIORITY, control.__screen.update);
         }
