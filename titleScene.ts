@@ -12,6 +12,7 @@ namespace mech {
             this.mechSprite = new ImageSprite(this, "imgTitleMech");
             this.mechSprite.xfrm.localPos.x = Fx8(Screen.SCREEN_LEFT - (this.mechSprite.img.width >> 1));
             this.mechSprite.xfrm.localPos.y = Fx8(Screen.SCREEN_TOP + (this.mechSprite.img.height >> 1) + 5);
+            //this.mechSprite.xfrm.localScl = Fx8(2);
 
             this.warsSprite = new ImageSprite(this, "imgTitleWars");
             this.warsSprite.xfrm.localPos.x = Fx8(Screen.SCREEN_RIGHT + (this.warsSprite.img.width >> 1));
@@ -48,6 +49,7 @@ namespace mech {
         /* override */ update(dt: number) {
             this.mechAnimIn.update();
             this.warsAnimIn.update();
+            //this.mechSprite.xfrm.localRot += 3;
         }
 
         /* override */ draw() {

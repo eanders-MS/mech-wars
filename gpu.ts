@@ -3,7 +3,7 @@ namespace mech.gpu {
     let frameId = 0;
     let commands: DrawCommand[] = [];
 
-    export class VertexShader {
+    export abstract class VertexShader {
         frameId: number;
         public verts: Vertex[];
         constructor(protected src: Vertex[]) {
@@ -17,9 +17,7 @@ namespace mech.gpu {
         public transform(frameId: number, xfrm: Affine): void {
             if (this.frameId === frameId) { return; }
             this.frameId = frameId;
-            this.src.forEach((v, i) => {
-                xfrm.transformToRef(v.pos, this.verts[i].pos);
-            });
+            this.src.forEach((v, i) => xfrm.transformToRef(v.pos, this.verts[i].pos));
         }
     }
 
@@ -99,7 +97,7 @@ namespace mech.gpu {
             Vec2.AddToRef(Vec2.AddToRef(this.uv0, this.uv1, this.uv), this.uv2, this.uv);
             Vec2.DivToRef(this.uv, this.vArea, this.uv);
 
-            // Sample the texture.
+            // Sample texture at uv.
             const u = Math.floor(Fx.toFloat(this.uv.u) * (this.tex.width + 1));
             const v = Math.floor(Fx.toFloat(this.uv.v) * (this.tex.height + 1));
             return this.tex.getPixel(u, v);
