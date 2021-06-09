@@ -129,18 +129,5 @@ namespace mech {
             body1.onCollision(body2.sprite);
             body2.onCollision(body1.sprite);
         }
-
-        public debugDraw(ofs: Vec2) {
-            const img = scene.backgroundImage();
-            for (let i = 0; i < this.bodies.length; ++i) {
-                const body = this.bodies[i];
-                if (!body.enabled) { continue; }
-                img.drawCircle(
-                    Fx.toInt(Fx.sub(body.xfrm.worldPos.x, ofs.x)),
-                    Fx.toInt(Fx.sub(body.xfrm.worldPos.y, ofs.y)),
-                    Fx.toFloat(body.radius),
-                    constants.DBG_DRAW_PHYSICS_COLOR);
-            }
-        }
     }
 }

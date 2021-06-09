@@ -323,17 +323,6 @@ namespace myImages {
 . f f f f . 
 . . . . . . 
 `;
-            case "image29":
-            case "imgGlyph_a":return img`
-. . . . . . 
-. . . . . . 
-. . . . . . 
-. . f f f . 
-. f . . f . 
-. f . f f . 
-. . f . f . 
-. . . . . . 
-`;
             case "image30":
             case "imgGlyph_b":return img`
 . . . . . . 
@@ -343,17 +332,6 @@ namespace myImages {
 . f . . f . 
 . f . . f . 
 . f f f . . 
-. . . . . . 
-`;
-            case "image31":
-            case "imgGlyph_c":return img`
-. . . . . . 
-. . . . . . 
-. . . . . . 
-. . f f f . 
-. f . . . . 
-. f . . . . 
-. . f f f . 
 . . . . . . 
 `;
             case "image32":
@@ -367,17 +345,6 @@ namespace myImages {
 . . f f f . 
 . . . . . . 
 `;
-            case "image33":
-            case "imgGlyph_e":return img`
-. . . . . . 
-. . . . . . 
-. . . . . . 
-. . f f . . 
-. f . f f . 
-. f f . . . 
-. . f f f . 
-. . . . . . 
-`;
             case "image34":
             case "imgGlyph_f":return img`
 . . . . . . 
@@ -388,17 +355,6 @@ namespace myImages {
 . . f . . . 
 . . f . . . 
 . . . . . . 
-`;
-            case "image35":
-            case "imgGlyph_g":return img`
-. . . . . . 
-. . . . . . 
-. . f f f . 
-. f . . f . 
-. f . . f . 
-. . f f f . 
-. f . . f . 
-. . f f . . 
 `;
             case "image1":
             case "imgTitleMech":return img`
@@ -433,6 +389,167 @@ namespace myImages {
 222222222.................22222222222222222222222222222222222222222222222222222222222222222222222..............222222222
 22222222..................22222222222222222222222222222222222.2222222222222222222222222222222222...............22222222.
 ..22222....................222222.22222222222222222222222222....2222222222222222222222222222222..................22222..
+`;
+            case "image36":
+            case "imgGlyph_h":return img`
+. . . . . . 
+. f . . . . 
+. f . . . . 
+. f f f . . 
+. f . . f . 
+. f . . f . 
+. f . . f . 
+. . . . . . 
+`;
+            case "image37":
+            case "imgGlyph_i":return img`
+. . . . . 
+. . f . . 
+. . . . . 
+. f f . . 
+. . f . . 
+. . f . . 
+. f f f . 
+. . . . . 
+`;
+            case "image39":
+            case "imgGlyph_k":return img`
+. . . . . . 
+. f . . . . 
+. f . . . . 
+. f . . f . 
+. f . f . . 
+. f f f . . 
+. f . . f . 
+. . . . . . 
+`;
+            case "image40":
+            case "imgGlyph_l":return img`
+. . . . . 
+. f f . . 
+. . f . . 
+. . f . . 
+. . f . . 
+. . f . . 
+. . f f . 
+. . . . . 
+`;
+            case "image44":
+            case "imgGlyph_p":return img`
+. . . . . . 
+. f f f . . 
+. f . . f . 
+. f . . f . 
+. f f f . . 
+. f . . . . 
+. f . . . . 
+. . . . . . 
+`;
+            case "image45":
+            case "imgGlyph_q":return img`
+. . . . . . 
+. . f f f . 
+. f . . f . 
+. f . . f . 
+. . f f f . 
+. . . . f . 
+. . . . f . 
+. . . . . . 
+`;
+            case "image38":
+            case "imgGlyph_j":return img`
+. . . . . 
+. . . f . 
+. . . . . 
+. . f f . 
+. . . f . 
+. . . f . 
+. f . f . 
+. . f . . 
+. . . . . 
+`;
+            case "image29":
+            case "imgGlyph_a":return img`
+. . . . . . 
+. . f f f . 
+. f . . f . 
+. f . f f . 
+. . f . f . 
+. . . . . . 
+`;
+            case "image31":
+            case "imgGlyph_c":return img`
+. . . . . . 
+. . f f f . 
+. f . . . . 
+. f . . . . 
+. . f f f . 
+. . . . . . 
+`;
+            case "image33":
+            case "imgGlyph_e":return img`
+. . . . . . 
+. . f f . . 
+. f . f f . 
+. f f . . . 
+. . f f f . 
+. . . . . . 
+`;
+            case "image35":
+            case "imgGlyph_g":return img`
+. . . . . . 
+. . f f f . 
+. f . . f . 
+. f . . f . 
+. . f f f . 
+. f . . f . 
+. . f f . . 
+. . . . . . 
+`;
+            case "image41":
+            case "imgGlyph_m":return img`
+. . . . . . 
+. f f . f . 
+. f f f f . 
+. f . . f . 
+. f . . f . 
+. . . . . . 
+`;
+            case "image42":
+            case "imgGlyph_n":return img`
+. . . . . . 
+. f f f . . 
+. f . . f . 
+. f . . f . 
+. f . . f . 
+. . . . . . 
+`;
+            case "image43":
+            case "imgGlyph_o":return img`
+. . . . . . 
+. . f f . . 
+. f . . f . 
+. f . . f . 
+. . f f . . 
+. . . . . . 
+`;
+            case "image46":
+            case "imgGlyph_r":return img`
+. . . . . . 
+. f f f . . 
+. f . . f . 
+. f . . . . 
+. f . . . . 
+. . . . . . 
+`;
+            case "image47":
+            case "imgGlyph_s":return img`
+. . . . . . 
+. . f f f . 
+. f f . . . 
+. . . f f . 
+. f f f . . 
+. . . . . . 
 `;
         }
         return null;
