@@ -1,7 +1,29 @@
-namespace mech.gpu {
+namespace mech {
+    export class Vertex {
+        // TODO: Support different vertex formats
+        private pos_: Vec2;
+        private uv_: Vec2;
 
+        public get pos() { return this.pos_; }
+        public set pos(v) { this.pos_.copyFrom(v); }
+        public get uv() { return this.uv_; }
+        public set uv(v) { this.uv_.copyFrom(v); }
+
+        constructor(pos: Vec2 = null, uv: Vec2 = null, ref = false) {
+            this.pos_ = pos ? ref ? pos : pos.clone() : new Vec2();
+            this.uv_ = uv ? ref ? uv : uv.clone() : new Vec2();
+        }
+
+        public clone(): Vertex {
+            return new Vertex(this.pos, this.uv);
+        }
+    }
+}
+
+namespace mech.gpu {
     let frameId = 0;
     let commands: DrawCommand[] = [];
+    //const line = image.create(screen.width, 1);
 
     export abstract class VertexShader {
         frameId: number;
@@ -15,6 +37,7 @@ namespace mech.gpu {
 
     export class BasicVertexShader extends VertexShader {
         public transform(frameId: number, xfrm: Affine): void {
+            // Multiple DrawCommands can share a single set of vertices, so don't transform the verts more than once per frame.
             if (this.frameId === frameId) { return; }
             this.frameId = frameId;
             this.src.forEach((v, i) => xfrm.transformToRef(v.pos, this.verts[i].pos));
@@ -83,55 +106,55 @@ namespace mech.gpu {
             // Debug draw triangle
             /*
             screen.drawLine(
-                Math.floor(Fx.toFloat(this.v0.pos.x)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(this.v0.pos.y)) + Screen.SCREEN_HALF_HEIGHT,
-                Math.floor(Fx.toFloat(this.v1.pos.x)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(this.v1.pos.y)) + Screen.SCREEN_HALF_HEIGHT,
+                Fx.toInt(this.v0.pos.x) + Screen.SCREEN_HALF_WIDTH,
+                Fx.toInt(this.v0.pos.y) + Screen.SCREEN_HALF_HEIGHT,
+                Fx.toInt(this.v1.pos.x) + Screen.SCREEN_HALF_WIDTH,
+                Fx.toInt(this.v1.pos.y) + Screen.SCREEN_HALF_HEIGHT,
                 15);
             screen.drawLine(
-                Math.floor(Fx.toFloat(this.v1.pos.x)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(this.v1.pos.y)) + Screen.SCREEN_HALF_HEIGHT,
-                Math.floor(Fx.toFloat(this.v2.pos.x)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(this.v2.pos.y)) + Screen.SCREEN_HALF_HEIGHT,
+                Fx.toInt(this.v1.pos.x) + Screen.SCREEN_HALF_WIDTH,
+                Fx.toInt(this.v1.pos.y) + Screen.SCREEN_HALF_HEIGHT,
+                Fx.toInt(this.v2.pos.x) + Screen.SCREEN_HALF_WIDTH,
+                Fx.toInt(this.v2.pos.y) + Screen.SCREEN_HALF_HEIGHT,
                 15);
             screen.drawLine(
-                Math.floor(Fx.toFloat(this.v2.pos.x)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(this.v2.pos.y)) + Screen.SCREEN_HALF_HEIGHT,
-                Math.floor(Fx.toFloat(this.v0.pos.x)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(this.v0.pos.y)) + Screen.SCREEN_HALF_HEIGHT,
+                Fx.toInt(this.v2.pos.x) + Screen.SCREEN_HALF_WIDTH,
+                Fx.toInt(this.v2.pos.y) + Screen.SCREEN_HALF_HEIGHT,
+                Fx.toInt(this.v0.pos.x) + Screen.SCREEN_HALF_WIDTH,
+                Fx.toInt(this.v0.pos.y) + Screen.SCREEN_HALF_HEIGHT,
                 15);
             */
 
             // Debug draw bounding box
             /*
-            const left = fx.clamp(this.bounds.left, Screen.SCREEN_LEFT_FX8, Screen.SCREEN_RIGHT_FX8);
-            const top = fx.clamp(this.bounds.top, Screen.SCREEN_TOP_FX8, Screen.SCREEN_BOTTOM_FX8);
-            const right = fx.clamp(Fx.add(this.bounds.left, this.bounds.width), Screen.SCREEN_LEFT_FX8, Screen.SCREEN_RIGHT_FX8);
-            const bottom = fx.clamp(Fx.add(this.bounds.top, this.bounds.height), Screen.SCREEN_TOP_FX8, Screen.SCREEN_BOTTOM_FX8);
+            const left = Fx.toInt(fx.clamp(this.bounds.left, Screen.SCREEN_LEFT_FX8, Screen.SCREEN_RIGHT_FX8));
+            const top = Fx.toInt(fx.clamp(this.bounds.top, Screen.SCREEN_TOP_FX8, Screen.SCREEN_BOTTOM_FX8));
+            const right = Fx.toInt(fx.clamp(Fx.add(this.bounds.left, this.bounds.width), Screen.SCREEN_LEFT_FX8, Screen.SCREEN_RIGHT_FX8));
+            const bottom = Fx.toInt(fx.clamp(Fx.add(this.bounds.top, this.bounds.height), Screen.SCREEN_TOP_FX8, Screen.SCREEN_BOTTOM_FX8));
             screen.drawLine(
-                Math.floor(Fx.toFloat(left)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(top)) + Screen.SCREEN_HALF_HEIGHT,
-                Math.floor(Fx.toFloat(right)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(top)) + Screen.SCREEN_HALF_HEIGHT,
-                15);
+                left + Screen.SCREEN_HALF_WIDTH,
+                top + Screen.SCREEN_HALF_HEIGHT,
+                right + Screen.SCREEN_HALF_WIDTH,
+                top + Screen.SCREEN_HALF_HEIGHT,
+                14);
             screen.drawLine(
-                Math.floor(Fx.toFloat(left)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(bottom)) + Screen.SCREEN_HALF_HEIGHT,
-                Math.floor(Fx.toFloat(right)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(bottom)) + Screen.SCREEN_HALF_HEIGHT,
-                15);
+                left + Screen.SCREEN_HALF_WIDTH,
+                bottom + Screen.SCREEN_HALF_HEIGHT,
+                right + Screen.SCREEN_HALF_WIDTH,
+                bottom + Screen.SCREEN_HALF_HEIGHT,
+                14);
             screen.drawLine(
-                Math.floor(Fx.toFloat(left)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(top)) + Screen.SCREEN_HALF_HEIGHT,
-                Math.floor(Fx.toFloat(left)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(bottom)) + Screen.SCREEN_HALF_HEIGHT,
-                15);
+                left + Screen.SCREEN_HALF_WIDTH,
+                top + Screen.SCREEN_HALF_HEIGHT,
+                left + Screen.SCREEN_HALF_WIDTH,
+                bottom + Screen.SCREEN_HALF_HEIGHT,
+                14);
             screen.drawLine(
-                Math.floor(Fx.toFloat(right)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(top)) + Screen.SCREEN_HALF_HEIGHT,
-                Math.floor(Fx.toFloat(right)) + Screen.SCREEN_HALF_WIDTH,
-                Math.floor(Fx.toFloat(bottom)) + Screen.SCREEN_HALF_HEIGHT,
-                15);
+                right + Screen.SCREEN_HALF_WIDTH,
+                top + Screen.SCREEN_HALF_HEIGHT,
+                right + Screen.SCREEN_HALF_WIDTH,
+                bottom + Screen.SCREEN_HALF_HEIGHT,
+                14);
             */
         }
 
@@ -145,6 +168,7 @@ namespace mech.gpu {
             if (w2 < Fx.zeroFx8) return 0;
 
             // Get uv coordinates at point.
+            // TODO: Support different texture wrapping modes.
             Vec2.ScaleToRef(this.v0.uv, w0, this.uv0);
             Vec2.ScaleToRef(this.v1.uv, w1, this.uv1);
             Vec2.ScaleToRef(this.v2.uv, w2, this.uv2);
@@ -152,19 +176,21 @@ namespace mech.gpu {
             Vec2.DivToRef(this.uv, this.vArea, this.uv);
 
             // Sample texture at uv.
-            const u = Fx.toInt(Fx.mul(this.uv.u, Fx8(this.tex.width)));
-            const v = Fx.toInt(Fx.mul(this.uv.v, Fx8(this.tex.height)));
+            const u = Fx.toInt(Fx.mul(this.uv.u, Fx8(this.tex.width - 1)));
+            const v = Fx.toInt(Fx.mul(this.uv.v, Fx8(this.tex.height - 1)));
             return this.tex.getPixel(u, v);
         }
     }
 
     export function exec() {
         ++frameId;
+        // Run vertex shaders.
         commands.forEach(cmd => {
             cmd.transform(frameId);
         });
+        // Run fragment shaders.
         commands.forEach(cmd => {
-            // Get bounds, and clip to screen.
+            // Get bounds of transformed vertices and clip to screen.
             const left = fx.clamp(cmd.bounds.left, Screen.SCREEN_LEFT_FX8, Screen.SCREEN_RIGHT_FX8);
             const top = fx.clamp(cmd.bounds.top, Screen.SCREEN_TOP_FX8, Screen.SCREEN_BOTTOM_FX8);
             const right = fx.clamp(Fx.add(cmd.bounds.left, cmd.bounds.width), Screen.SCREEN_LEFT_FX8, Screen.SCREEN_RIGHT_FX8);
@@ -174,7 +200,9 @@ namespace mech.gpu {
             for (; p.y <= bottom; p.y = Fx.add(p.y, Fx.oneFx8)) {
                 const yi = Fx.toInt(p.y) + Screen.SCREEN_HALF_HEIGHT;
                 p.x = left;
+                //line.fill(0);
                 for (; p.x <= right; p.x = Fx.add(p.x, Fx.oneFx8)) {
+                    // Returns zero if p is outside the poly.
                     const color = cmd.shade(p);
                     if (color) {
                         screen.setPixel(
@@ -183,6 +211,7 @@ namespace mech.gpu {
                             color);
                     }
                 }
+                //screen.blit(0, yi, screen.width, 1, line, 0, 0, screen.width, 1, true);
             }
         });
         commands = [];

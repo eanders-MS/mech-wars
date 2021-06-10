@@ -20,7 +20,6 @@
         "affine.ts",
         "animation.ts",
         "easing.ts",
-        "vert.ts",
         "gpu.ts",
         "bounds.ts"
     ],

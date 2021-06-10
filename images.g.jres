@@ -234,6 +234,41 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "imgGlyph_s"
     },
+    "image48": {
+        "data": "hwQGAAgAAAAAAAAAAPAAAPD//wAA8AAPAPDwAAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "imgGlyph_t"
+    },
+    "image49": {
+        "data": "hwQGAAYAAAAAAAAA8P8AAAAADwAAAA8A8P8PAAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "imgGlyph_u"
+    },
+    "image50": {
+        "data": "hwQGAAYAAAAAAAAA8A8AAADwDwAA8A8A8A8AAAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "imgGlyph_v"
+    },
+    "image51": {
+        "data": "hwQGAAYAAAAAAAAA8P8PAADwDwAA8AAA8P8PAAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "imgGlyph_w"
+    },
+    "image52": {
+        "data": "hwQGAAYAAAAAAAAA8AAPAAD/AAAA/wAA8AAPAAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "imgGlyph_x"
+    },
+    "image53": {
+        "data": "hwQGAAgAAAAAAAAA8P/wAAAADw8AAA8P8P//AAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "imgGlyph_y"
+    },
+    "image54": {
+        "data": "hwQGAAYAAAAAAAAA8AAPAPDwDwDwDw8A8AAPAAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "imgGlyph_z"
+    },
     "*": {
         "mimeType": "image/x-mkcd-f4",
         "dataEncoding": "base64",

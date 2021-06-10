@@ -551,6 +551,73 @@ namespace myImages {
 . f f f . . 
 . . . . . . 
 `;
+            case "image48":
+            case "imgGlyph_t":return img`
+. . . . . . 
+. . f . . . 
+. . f . . . 
+. f f f f . 
+. . f . . . 
+. . f . f . 
+. . . f . . 
+. . . . . . 
+`;
+            case "image49":
+            case "imgGlyph_u":return img`
+. . . . . . 
+. f . . f . 
+. f . . f . 
+. f . . f . 
+. . f f f . 
+. . . . . . 
+`;
+            case "image50":
+            case "imgGlyph_v":return img`
+. . . . . . 
+. f . . f . 
+. f . . f . 
+. . f f . . 
+. . f f . . 
+. . . . . . 
+`;
+            case "image51":
+            case "imgGlyph_w":return img`
+. . . . . . 
+. f . . f . 
+. f . . f . 
+. f f f f . 
+. f f . f . 
+. . . . . . 
+`;
+            case "image52":
+            case "imgGlyph_x":return img`
+. . . . . . 
+. f . . f . 
+. . f f . . 
+. . f f . . 
+. f . . f . 
+. . . . . . 
+`;
+            case "image53":
+            case "imgGlyph_y":return img`
+. . . . . . 
+. f . . f . 
+. f . . f . 
+. f . . f . 
+. . f f f . 
+. f . . f . 
+. . f f . . 
+. . . . . . 
+`;
+            case "image54":
+            case "imgGlyph_z":return img`
+. . . . . . 
+. f f f f . 
+. . . f . . 
+. . f . . . 
+. f f f f . 
+. . . . . . 
+`;
         }
         return null;
     })
