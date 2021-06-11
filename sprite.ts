@@ -1,25 +1,16 @@
 namespace mech {
-    let idSeq = 0;
-
-    export class Sprite {
-        private id_: number;
+    export class Sprite extends Thing implements IPlaceable, ISizable {
         private xfrm_: Affine;
 
-        //% blockCombine block="id" callInDebugger
-        public get id() { return this.id_; }
-        //% blockCombine block="xfrm" callInDebugger
+        /* abstract */ get width(): Fx8 { return Fx.zeroFx8; }
+        /* abstract */ get height(): Fx8 { return Fx.zeroFx8; }
+
         public get xfrm() { return this.xfrm_; }
 
         constructor(public scene: Scene) {
-            this.id_ = idSeq++;
+            super("sprite");
             this.xfrm_ = new Affine();
             this.xfrm_.parent = scene.xfrm;
-        }
-
-        /* virtual */ update() {
-        }
-
-        /* virtual */ draw() {
         }
     }
 
@@ -29,8 +20,12 @@ namespace mech {
     export class ImageSprite extends Sprite {
         img: Image;
         verts: Vertex[];
+        vs: gpu.VertexShader;
         tri0: gpu.DrawTexturedTri;
         tri1: gpu.DrawTexturedTri;
+
+        public get width() { return this.vs.bounds.width; }
+        public get height() { return this.vs.bounds.height; }
 
         /**
          * Quad layout:
@@ -69,9 +64,9 @@ namespace mech {
                 new Vertex(pts[2], uvs[2], true),
                 new Vertex(pts[3], uvs[3], true),
             ];
-            const vs = new gpu.BasicVertexShader(this.verts);
-            this.tri0 = new gpu.DrawTexturedTri(vs, IMAGE_SPRITE_TRI0_INDICES, this.img);
-            this.tri1 = new gpu.DrawTexturedTri(vs, IMAGE_SPRITE_TRI1_INDICES, this.img);
+            this.vs = new gpu.BasicVertexShader(this.verts);
+            this.tri0 = new gpu.DrawTexturedTri(this.vs, IMAGE_SPRITE_TRI0_INDICES, this.img);
+            this.tri1 = new gpu.DrawTexturedTri(this.vs, IMAGE_SPRITE_TRI1_INDICES, this.img);
         }
 
         /* override */ update() {

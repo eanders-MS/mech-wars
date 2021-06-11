@@ -25,14 +25,27 @@ namespace mech.gpu {
     let commands: DrawCommand[] = [];
     //const line = image.create(screen.width, 1);
 
-    export abstract class VertexShader {
+    export class VertexShader {
         frameId: number;
         public verts: Vertex[];
+        public bounds: Bounds;
+        pts: Vec2[];
+        min: Vec2;
+        max: Vec2;
         constructor(protected src: Vertex[]) {
             this.frameId = -1;
             this.verts = src.map(v => v.clone());
+            this.pts = src.map(v => v.pos);
+            this.min = new Vec2();
+            this.max = new Vec2();
+            this.bounds = Bounds.Zero();
         }
-        public transform(frameId: number, xfrm: Affine): void { }
+        protected calcBounds() {
+            Vec2.MinOfToRef(this.pts, this.min);
+            Vec2.MaxOfToRef(this.pts, this.max);
+            this.bounds.from({ min: this.min, max: this.max });
+        }
+        /*abstract*/ transform(frameId: number, xfrm: Affine): void { }
     }
 
     export class BasicVertexShader extends VertexShader {
@@ -41,6 +54,7 @@ namespace mech.gpu {
             if (this.frameId === frameId) { return; }
             this.frameId = frameId;
             this.src.forEach((v, i) => xfrm.transformToRef(v.pos, this.verts[i].pos));
+            this.calcBounds();
         }
     }
 
