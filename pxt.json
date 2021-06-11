@@ -22,7 +22,9 @@
         "easing.ts",
         "gpu.ts",
         "bounds.ts",
-        "thing.ts"
+        "thing.ts",
+        "arenaScene.ts",
+        "app.ts"
     ],
     "testFiles": [
         "test.ts"

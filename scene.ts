@@ -24,7 +24,7 @@ namespace mech {
     const SCREEN_PRIORITY = 100;
 
     export class Scene {
-        public static SCENE_OFFSET = Vec2.N(Screen.SCREEN_HALF_WIDTH, Screen.SCREEN_HALF_HEIGHT);
+        public static SCENE_OFFSET = Screen.SCREEN_HALF_SIZE;
         private xfrm_: Affine;
         private color_: number;
 
@@ -81,13 +81,13 @@ namespace mech {
             });
             control.eventContext().registerFrameHandler(GPU_PRIORITY, () => {
                 screen.fill(this.color_);
-                gpu.exec();
+                Gpu.exec();
             });
             control.eventContext().registerFrameHandler(SCREEN_PRIORITY, control.__screen.update);
         }
     }
 
-    class SceneManager {
+    export class SceneManager {
         private scenes: Scene[];
 
         constructor() {
@@ -115,9 +115,9 @@ namespace mech {
             }
             control.pushEventContext();
             this.scenes.push(scene);
+            scene.__init();
             scene.startup();
             scene.activate();
-            scene.__init();
         }
 
         public popScene() {
@@ -133,7 +133,4 @@ namespace mech {
             }
         }
     }
-
-    const sceneMgr = new SceneManager();
-    export function sceneManager() { return sceneMgr; }
 }

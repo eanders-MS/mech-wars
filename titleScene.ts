@@ -17,7 +17,7 @@ namespace mech {
             this.warsSprite = new ImageSprite(this, "imgTitleWars");
             this.warsSprite.xfrm.localPos.x = Fx8(Screen.SCREEN_RIGHT + (this.warsSprite.img.width >> 1));
             this.warsSprite.xfrm.localPos.y = Fx8(Fx.toFloat(this.mechSprite.xfrm.localPos.y) + this.mechSprite.img.height + 2);
-            //this.warsSprite.xfrm.localScl = Fx8(1.1);
+            //this.warsSprite.xfrm.localScl = Fx8(2);
 
             this.mechAnimIn = new Animation((value: Vec2) => this.mechAnimCallback(value));
             this.mechAnimIn.addFrame(new EaseFrame({

@@ -20,7 +20,7 @@ namespace mech {
     }
 }
 
-namespace mech.gpu {
+namespace mech.Gpu {
     let frameId = 0;
     let commands: DrawCommand[] = [];
     //const line = image.create(screen.width, 1);
@@ -219,6 +219,10 @@ namespace mech.gpu {
                     // Returns zero if p is outside the poly.
                     const color = cmd.shade(p);
                     if (color) {
+                        //line.setPixel(
+                        //    Fx.toInt(p.x) + Screen.SCREEN_HALF_WIDTH,
+                        //    0,
+                        //    color);
                         screen.setPixel(
                             Fx.toInt(p.x) + Screen.SCREEN_HALF_WIDTH,
                             yi,
