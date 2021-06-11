@@ -27,7 +27,7 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.5.21",
+        "target": "1.5.24",
         "targetId": "arcade"
     },
     "supportedTargets": [
