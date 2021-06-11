@@ -50,6 +50,7 @@ namespace mech {
         /* override */ update(dt: number) {
             this.mechAnimIn.update();
             this.warsAnimIn.update();
+            //this.warsSprite.xfrm.localRot += 2;
         }
 
         /* override */ draw() {

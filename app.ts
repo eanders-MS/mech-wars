@@ -4,6 +4,7 @@ namespace mech {
 
         constructor() {
             this.sceneMgr = new SceneManager();
+            //this.sceneMgr.pushScene(new TitleScene())
             this.sceneMgr.pushScene(new ArenaScene())
         }
     }

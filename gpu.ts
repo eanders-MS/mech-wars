@@ -116,68 +116,17 @@ namespace mech.Gpu {
             Vec2.MinOfToRef(this.pts, this.min);
             Vec2.MaxOfToRef(this.pts, this.max);
             this.bounds.from({ min: this.min, max: this.max });
-
-            // Debug draw triangle
-            /*
-            screen.drawLine(
-                Fx.toInt(this.v0.pos.x) + Screen.SCREEN_HALF_WIDTH,
-                Fx.toInt(this.v0.pos.y) + Screen.SCREEN_HALF_HEIGHT,
-                Fx.toInt(this.v1.pos.x) + Screen.SCREEN_HALF_WIDTH,
-                Fx.toInt(this.v1.pos.y) + Screen.SCREEN_HALF_HEIGHT,
-                15);
-            screen.drawLine(
-                Fx.toInt(this.v1.pos.x) + Screen.SCREEN_HALF_WIDTH,
-                Fx.toInt(this.v1.pos.y) + Screen.SCREEN_HALF_HEIGHT,
-                Fx.toInt(this.v2.pos.x) + Screen.SCREEN_HALF_WIDTH,
-                Fx.toInt(this.v2.pos.y) + Screen.SCREEN_HALF_HEIGHT,
-                15);
-            screen.drawLine(
-                Fx.toInt(this.v2.pos.x) + Screen.SCREEN_HALF_WIDTH,
-                Fx.toInt(this.v2.pos.y) + Screen.SCREEN_HALF_HEIGHT,
-                Fx.toInt(this.v0.pos.x) + Screen.SCREEN_HALF_WIDTH,
-                Fx.toInt(this.v0.pos.y) + Screen.SCREEN_HALF_HEIGHT,
-                15);
-            */
-
-            // Debug draw bounding box
-            /*
-            const left = Fx.toInt(fx.clamp(this.bounds.left, Screen.SCREEN_LEFT_FX8, Screen.SCREEN_RIGHT_FX8));
-            const top = Fx.toInt(fx.clamp(this.bounds.top, Screen.SCREEN_TOP_FX8, Screen.SCREEN_BOTTOM_FX8));
-            const right = Fx.toInt(fx.clamp(Fx.add(this.bounds.left, this.bounds.width), Screen.SCREEN_LEFT_FX8, Screen.SCREEN_RIGHT_FX8));
-            const bottom = Fx.toInt(fx.clamp(Fx.add(this.bounds.top, this.bounds.height), Screen.SCREEN_TOP_FX8, Screen.SCREEN_BOTTOM_FX8));
-            screen.drawLine(
-                left + Screen.SCREEN_HALF_WIDTH,
-                top + Screen.SCREEN_HALF_HEIGHT,
-                right + Screen.SCREEN_HALF_WIDTH,
-                top + Screen.SCREEN_HALF_HEIGHT,
-                14);
-            screen.drawLine(
-                left + Screen.SCREEN_HALF_WIDTH,
-                bottom + Screen.SCREEN_HALF_HEIGHT,
-                right + Screen.SCREEN_HALF_WIDTH,
-                bottom + Screen.SCREEN_HALF_HEIGHT,
-                14);
-            screen.drawLine(
-                left + Screen.SCREEN_HALF_WIDTH,
-                top + Screen.SCREEN_HALF_HEIGHT,
-                left + Screen.SCREEN_HALF_WIDTH,
-                bottom + Screen.SCREEN_HALF_HEIGHT,
-                14);
-            screen.drawLine(
-                right + Screen.SCREEN_HALF_WIDTH,
-                top + Screen.SCREEN_HALF_HEIGHT,
-                right + Screen.SCREEN_HALF_WIDTH,
-                bottom + Screen.SCREEN_HALF_HEIGHT,
-                14);
-            */
         }
+
+        // Hand-tuned threshold for the diagonal edge. Should be Fx.zeroFx8 ideally, but that results in missing pixels. Rounding issue?
+        private static readonly V2V0_EDGE_FUDGE = Fx8(-15);
 
         public shade(/* const */p: Vec2): number {
             // Is point in triangle?
             const w0 = Vec2.Cross(this.v1.pos, this.v2.pos, p);
             if (w0 < Fx.zeroFx8) return 0;
             const w1 = Vec2.Cross(this.v2.pos, this.v0.pos, p);
-            if (w1 < Fx.zeroFx8) return 0;
+            if (w1 < DrawTexturedTri.V2V0_EDGE_FUDGE) return 0;
             const w2 = Vec2.Cross(this.v0.pos, this.v1.pos, p);
             if (w2 < Fx.zeroFx8) return 0;
 

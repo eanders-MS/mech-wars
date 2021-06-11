@@ -292,14 +292,14 @@ namespace mech {
         }
 
         public static Cross(a: Vec2, b: Vec2, c: Vec2): Fx8 {
+            // ((c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x)
             return Fx.sub(
                 Fx.mul(
-                    Fx.sub(b.x, a.x),
-                    Fx.neg(Fx.sub(c.y, a.y)
-                    )),
+                    Fx.sub(c.x, a.x),
+                    Fx.sub(b.y, a.y)),
                 Fx.mul(
-                    Fx.neg(Fx.sub(b.y, a.y)),
-                    Fx.sub(c.x, a.x)));
+                    Fx.sub(c.y, a.y),
+                    Fx.sub(b.x, a.x)));
         }
 
         public static MinOfToRef(arr: Vec2[], ref: Vec2): Vec2 {
