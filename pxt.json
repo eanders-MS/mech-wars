@@ -15,7 +15,6 @@
         "sprite.ts",
         "physics.ts",
         "constants.ts",
-        "input.ts",
         "titleScene.ts",
         "affine.ts",
         "animation.ts",

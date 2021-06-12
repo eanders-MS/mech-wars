@@ -23,7 +23,6 @@ namespace mech {
 namespace mech.Gpu {
     let frameId = 0;
     let commands: DrawCommand[] = [];
-    //const line = image.create(screen.width, 1);
 
     export class VertexShader {
         frameId: number;
@@ -48,7 +47,7 @@ namespace mech.Gpu {
         /*abstract*/ transform(frameId: number, xfrm: Affine): void { }
     }
 
-    export class BasicVertexShader extends VertexShader {
+    export class TexturedVertexShader extends VertexShader {
         public transform(frameId: number, xfrm: Affine): void {
             // Multiple DrawCommands can share a single set of vertices, so don't transform the verts more than once per frame.
             if (this.frameId === frameId) { return; }
@@ -118,11 +117,11 @@ namespace mech.Gpu {
             this.bounds.from({ min: this.min, max: this.max });
         }
 
-        // Hand-tuned threshold for the diagonal edge. Should be Fx.zeroFx8 ideally, but that results in missing pixels. Rounding issue?
-        private static readonly V2V0_EDGE_FUDGE = Fx8(-15);
+        // Hand-tuned threshold for shared edge of a split rectangle. Should be Fx.zeroFx8 ideally, but that results in missing pixels. Rounding issue?
+        private static readonly V2V0_EDGE_FUDGE = Fx8(-18);
 
         public shade(/* const */p: Vec2): number {
-            // Is point in triangle?
+            // Check barycentric coords. Is point in triangle?
             const w0 = Vec2.Cross(this.v1.pos, this.v2.pos, p);
             if (w0 < Fx.zeroFx8) return 0;
             const w1 = Vec2.Cross(this.v2.pos, this.v0.pos, p);
@@ -163,22 +162,16 @@ namespace mech.Gpu {
             for (; p.y <= bottom; p.y = Fx.add(p.y, Fx.oneFx8)) {
                 const yi = Fx.toInt(p.y) + Screen.SCREEN_HALF_HEIGHT;
                 p.x = left;
-                //line.fill(0);
                 for (; p.x <= right; p.x = Fx.add(p.x, Fx.oneFx8)) {
                     // Returns zero if p is outside the poly.
                     const color = cmd.shade(p);
                     if (color) {
-                        //line.setPixel(
-                        //    Fx.toInt(p.x) + Screen.SCREEN_HALF_WIDTH,
-                        //    0,
-                        //    color);
                         screen.setPixel(
                             Fx.toInt(p.x) + Screen.SCREEN_HALF_WIDTH,
                             yi,
                             color);
                     }
                 }
-                //screen.blit(0, yi, screen.width, 1, line, 0, 0, screen.width, 1, true);
             }
         });
         commands = [];
