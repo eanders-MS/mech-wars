@@ -637,6 +637,26 @@ namespace myImages {
 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 
 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 
 `;
+            case "image56":
+            case "imgTestMechLeft":return img`
+. 2 2 2 2 2 . 
+2 2 2 2 2 2 2 
+2 2 2 2 2 2 2 
+2 2 2 2 2 2 2 
+2 2 2 2 2 2 2 
+2 2 2 2 2 2 2 
+. 2 2 2 2 2 . 
+`;
+            case "image57":
+            case "imgTestMechRight":return img`
+. 7 7 7 7 7 . 
+7 7 7 7 7 7 7 
+7 7 7 7 7 7 7 
+7 7 7 7 7 7 7 
+7 7 7 7 7 7 7 
+7 7 7 7 7 7 7 
+. 7 7 7 7 7 . 
+`;
         }
         return null;
     })

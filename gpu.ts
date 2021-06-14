@@ -47,7 +47,7 @@ namespace mech.Gpu {
         /*abstract*/ transform(frameId: number, xfrm: Affine): void { }
     }
 
-    export class TexturedVertexShader extends VertexShader {
+    export class BasicVertexShader extends VertexShader {
         public transform(frameId: number, xfrm: Affine): void {
             // Multiple DrawCommands can share a single set of vertices, so don't transform the verts more than once per frame.
             if (this.frameId === frameId) { return; }
@@ -117,8 +117,10 @@ namespace mech.Gpu {
             this.bounds.from({ min: this.min, max: this.max });
         }
 
-        // Hand-tuned threshold for shared edge of a split rectangle. Should be Fx.zeroFx8 ideally, but that results in missing pixels. Rounding issue?
-        private static readonly V2V0_EDGE_FUDGE = Fx8(-18);
+        // Hand-tuned threshold for shared edge of a split rectangle. Should
+        // be Fx.zeroFx8 ideally, but that results in missing pixels.
+        // Math issue?
+        private static readonly V2V0_EDGE_FUDGE = Fx8(-20);
 
         public shade(/* const */p: Vec2): number {
             // Check barycentric coords. Is point in triangle?

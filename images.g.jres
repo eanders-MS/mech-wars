@@ -274,6 +274,16 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "testMech0"
     },
+    "image56": {
+        "data": "hwQHAAcAAAAgIiIAIiIiAiIiIgIiIiICIiIiAiIiIgIgIiIA",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "imgTestMechLeft"
+    },
+    "image57": {
+        "data": "hwQHAAcAAABwd3cAd3d3B3d3dwd3d3cHd3d3B3d3dwdwd3cA",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "imgTestMechRight"
+    },
     "*": {
         "mimeType": "image/x-mkcd-f4",
         "dataEncoding": "base64",

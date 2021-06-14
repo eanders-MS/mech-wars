@@ -21,8 +21,8 @@ namespace mech {
         img: Image;
         verts: Vertex[];
         vs: Gpu.VertexShader;
-        tri0: Gpu.DrawTexturedTri;
-        tri1: Gpu.DrawTexturedTri;
+        tri0: Gpu.DrawCommand;
+        tri1: Gpu.DrawCommand;
 
         public get width() { return this.vs.bounds.width; }
         public get height() { return this.vs.bounds.height; }
@@ -64,7 +64,7 @@ namespace mech {
                 new Vertex(pts[2], uvs[2], true),
                 new Vertex(pts[3], uvs[3], true),
             ];
-            this.vs = new Gpu.TexturedVertexShader(this.verts);
+            this.vs = new Gpu.BasicVertexShader(this.verts);
             this.tri0 = new Gpu.DrawTexturedTri(this.vs, IMAGE_SPRITE_TRI0_INDICES, this.img);
             this.tri1 = new Gpu.DrawTexturedTri(this.vs, IMAGE_SPRITE_TRI1_INDICES, this.img);
         }
