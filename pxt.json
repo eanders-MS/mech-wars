@@ -1,8 +1,9 @@
 {
-    "name": "Mech Wars!",
+    "name": "Mech Wars?",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "affine": "github:eanders-MS/affine#1541b7a0cba845aed97b2d76349d628628ba364c"
     },
     "files": [
         "main.ts",
@@ -10,26 +11,16 @@
         "assets.json",
         "images.g.jres",
         "images.g.ts",
-        "math.ts",
-        "scene.ts",
-        "sprite.ts",
         "physics.ts",
         "constants.ts",
-        "titleScene.ts",
-        "affine.ts",
-        "animation.ts",
-        "easing.ts",
-        "gpu.ts",
-        "bounds.ts",
-        "thing.ts",
-        "arenaScene.ts",
-        "app.ts"
+        "input.ts",
+        "titleScene.ts"
     ],
     "testFiles": [
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.5.21",
+        "target": "1.5.46",
         "targetId": "arcade"
     },
     "supportedTargets": [

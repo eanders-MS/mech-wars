@@ -2,11 +2,11 @@ namespace mech {
     export class Body {
         enabled: boolean;
         bumpCanMove: boolean;
-        v: Vec2;
+        v: affine.Vec2;
         private mass_: Fx8;
         private radius_: Fx8;
         private friction_: Fx8;
-        private vf: Vec2;
+        private vf: affine.Vec2;
         private restitution_: Fx8; 
 
         //% blockCombine block="xfrm" callInDebugger
@@ -23,15 +23,15 @@ namespace mech {
         get friction() { return this.friction_; }
         set friction(v) {
             this.friction_ = v;
-            this.vf = new Vec2(Fx.sub(Fx.oneFx8, v), Fx.sub(Fx.oneFx8, v));
+            this.vf = new affine.Vec2(Fx.sub(Fx.oneFx8, v), Fx.sub(Fx.oneFx8, v));
         }
 
         //% blockCombine block="restitution" callInDebugger
         get restitution() { return this.restitution_; }
         set restitution(v) { this.restitution_ = v; }
 
-        constructor(public sprite: Sprite, public onCollision: (other: Sprite) => void) {
-            this.v = new Vec2();
+        constructor(public sprite: affine.Sprite, public onCollision: (other: affine.Sprite) => void) {
+            this.v = new affine.Vec2();
             this.enabled = false;
             this.bumpCanMove = true;
             this.mass = Fx.oneFx8;
@@ -41,7 +41,7 @@ namespace mech {
 
         applyFriction() {
             if (this.friction_ === Fx.zeroFx8) { return; }
-            Vec2.MulToRef(this.v, this.vf, this.v);
+            affine.Vec2.MulToRef(this.v, this.vf, this.v);
         }
 
         applyVelocity() {
@@ -50,10 +50,10 @@ namespace mech {
         }
 
         // Pass negative maxSpeed for no maximum.
-        public applyImpulse(v: Vec2, maxSpeed: Fx8) {
-            Vec2.AddToRef(this.v, v, this.v);
+        public applyImpulse(v: affine.Vec2, maxSpeed: Fx8) {
+            affine.Vec2.AddToRef(this.v, v, this.v);
             if (maxSpeed >= Fx.zeroFx8 && this.v.magSq() > Fx.mul(maxSpeed, maxSpeed)) {
-                Vec2.SetLengthToRef(this.v, maxSpeed, this.v);
+                affine.Vec2.SetLengthToRef(this.v, maxSpeed, this.v);
             }
         }
 
@@ -108,14 +108,14 @@ namespace mech {
         private checkCollision(body1: Body, body2: Body) {
             const minDist = Fx.add(body1.radius, body2.radius);
             const minDistSq = Fx.mul(minDist, minDist);
-            const vDiff = Vec2.SubToRef(body2.xfrm.worldPos, body1.xfrm.worldPos, new Vec2());
+            const vDiff = affine.Vec2.SubToRef(body2.xfrm.worldPos, body1.xfrm.worldPos, new affine.Vec2());
             const distSq = vDiff.magSq();
             // Not colliding?
             if (distSq > minDistSq) { return; }
             const dist = Fx8(Math.sqrt(Fx.toFloat(distSq)));
-            const vNormCollision = Vec2.ScaleToRef(vDiff, dist, new Vec2());
-            const vRelVelocity = Vec2.SubToRef(body1.v, body2.v, new Vec2());
-            let speed = Fx.abs(Vec2.MulToRef(vRelVelocity, vNormCollision, new Vec2()).magSq());
+            const vNormCollision = affine.Vec2.ScaleToRef(vDiff, dist, new affine.Vec2());
+            const vRelVelocity = affine.Vec2.SubToRef(body1.v, body2.v, new affine.Vec2());
+            let speed = Fx.abs(affine.Vec2.MulToRef(vRelVelocity, vNormCollision, new affine.Vec2()).magSq());
             speed = Fx.mul(speed, Fx.min(body1.restitution, body2.restitution));
             const impulse = Fx.div(Fx.mul(Fx8(2), speed), Fx.add(body1.mass, body2.mass));
             if (body1.bumpCanMove) {
@@ -128,6 +128,19 @@ namespace mech {
             }
             body1.onCollision(body2.sprite);
             body2.onCollision(body1.sprite);
+        }
+
+        public debugDraw(ofs: affine.Vec2) {
+            const img = scene.backgroundImage();
+            for (let i = 0; i < this.bodies.length; ++i) {
+                const body = this.bodies[i];
+                if (!body.enabled) { continue; }
+                img.drawCircle(
+                    Fx.toInt(Fx.sub(body.xfrm.worldPos.x, ofs.x)),
+                    Fx.toInt(Fx.sub(body.xfrm.worldPos.y, ofs.y)),
+                    Fx.toFloat(body.radius),
+                    constants.DBG_DRAW_PHYSICS_COLOR);
+            }
         }
     }
 }
