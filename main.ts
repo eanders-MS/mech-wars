@@ -1,1 +1,1 @@
-setTimeout(() => mech.sceneManager().pushScene(new mech.TitleScene()), 1);
+setTimeout(() => affine.Scene.pushScene(new mech.TitleScene()), 1);
