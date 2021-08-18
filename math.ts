@@ -18,7 +18,16 @@ namespace mech {
             return Fx.leftShift(Fx.rightShift(v, 8), 8);
         }
         public static round(v: Fx8): Fx8 {
+            // lazy implementation
             return fx.floor(Fx.add(Fx.mul(fx.sign(v), Fx8(0.5)), v));
+        }
+        public static mod(v: Fx8, q: Fx8): Fx8 {
+            // lazy implementation
+            return Fx8(Fx.toFloat(v) % Fx.toFloat(q));
+        }
+        public static sqrt(v: Fx8): Fx8 {
+            // lazy implementation
+            return Fx8(Math.sqrt(Fx.toFloat(v)));
         }
         public static random(): Fx8 {
             return Fx8(Math.random());
@@ -30,7 +39,7 @@ namespace mech {
             return Fx8(Math.randomRange(min, max));
         }
     }
-    
+
     // The number of angle steps in a full circle.
     const NUM_ANGLE_SLICES = 360;
     const NUM_ANGLE_SLICES_OVER_2 = NUM_ANGLE_SLICES >> 1;
@@ -94,7 +103,6 @@ namespace mech {
             this.x_ = v;
             this.dirty = true;
         }
-
         //% blockCombine block="y" callInDebugger
         public get y() { return this.y_; }
         public set y(v: Fx8) {
@@ -102,6 +110,13 @@ namespace mech {
             this.y_ = v;
             this.dirty = true;
         }
+
+        //% blockCombine block="u" callInDebugger
+        public get u() { return this.x_; }
+        public set u(n) { this.x = n; }
+        //% blockCombine block="v" callInDebugger
+        public get v() { return this.y_; }
+        public set v(n) { this.y = n; }
 
         constructor(public x_ = Fx.zeroFx8, public y_ = Fx.zeroFx8) {
         }
@@ -150,6 +165,12 @@ namespace mech {
             this.x = Fx.add(this.x, v.x);
             this.y = Fx.add(this.y, v.y);
             return this;
+        }
+
+        public invSlope(): Fx8 {
+            if (this.y === Fx.zeroFx8) { return Fx.mul(Fx.oneFx8, fx.sign(this.y)); }
+            if (this.x === Fx.zeroFx8) { return Fx.zeroFx8; }
+            return Fx.div(this.x, this.y);
         }
 
         public static ZeroToRef(ref: Vec2): Vec2 {
@@ -235,8 +256,26 @@ namespace mech {
         }
 
         public static DivToRef(a: Vec2, b: Vec2, ref: Vec2): Vec2 {
-            ref.x = Fx.div(a.x, b.x);
-            ref.y = Fx.div(a.y, b.y);
+            ref.x = b.x !== Fx.zeroFx8 ? Fx.div(a.x, b.x) : Fx.zeroFx8;
+            ref.y = b.y !== Fx.zeroFx8 ? Fx.div(a.y, b.y) : Fx.zeroFx8;
+            return ref;
+        }
+
+        public static AbsToRef(v: Vec2, ref: Vec2): Vec2 {
+            ref.x = Fx.abs(v.x);
+            ref.y = Fx.abs(v.y);
+            return ref;
+        }
+
+        public static InvToRef(s: Fx8, v: Vec2, ref: Vec2): Vec2 {
+            ref.x = v.x !== Fx.zeroFx8 ? Fx.div(s, v.x) : Fx.zeroFx8;
+            ref.y = v.y !== Fx.zeroFx8 ? Fx.div(s, v.y) : Fx.zeroFx8;
+            return ref;
+        }
+
+        public static SignToRef(v: Vec2, ref: Vec2): Vec2 {
+            ref.x = fx.sign(v.x);
+            ref.y = fx.sign(v.y);
             return ref;
         }
 
@@ -244,6 +283,93 @@ namespace mech {
             ref.x = fx.randomRange(xmin, xmax);
             ref.y = fx.randomRange(ymin, ymax);
             return ref;
+        }
+
+        public static Dot(a: Vec2, b: Vec2): Fx8 {
+            return Fx.add(
+                Fx.mul(a.x, b.y),
+                Fx.mul(a.y, b.x));
+        }
+
+        public static Cross(a: Vec2, b: Vec2, c: Vec2): Fx8 {
+            // ((c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x)
+            return Fx.sub(
+                Fx.mul(
+                    Fx.sub(c.x, a.x),
+                    Fx.sub(b.y, a.y)),
+                Fx.mul(
+                    Fx.sub(c.y, a.y),
+                    Fx.sub(b.x, a.x)));
+        }
+
+        public static MinOfToRef(arr: Vec2[], ref: Vec2): Vec2 {
+            ref.x = Fx8(10000);
+            ref.y = Fx8(10000);
+            for (const v of arr) {
+                if (v.x < ref.x) { ref.x = v.x; }
+                if (v.y < ref.y) { ref.y = v.y; }
+            }
+            return ref;
+        }
+
+        public static MaxOfToRef(arr: Vec2[], ref: Vec2): Vec2 {
+            ref.x = Fx8(-10000);
+            ref.y = Fx8(-10000);
+            for (const v of arr) {
+                if (v.x > ref.x) { ref.x = v.x; }
+                if (v.y > ref.y) { ref.y = v.y; }
+            }
+            return ref;
+        }
+    }
+
+    export enum ELineIntersectionResult {
+        TRUE_PARALLEL,
+        COINCIDENT_PARTLY_OVERLAP,
+        COINCIDENT_TOTAL_OVERLAP,
+        COINCIDENT_NO_OVERLAP,
+        INTERSECTION_OUTSIDE_SEGMENT,
+        INTERSECTION_IN_ONE_SEGMENT,
+        INTERSECTION_INSIDE_SEGMENT
+    }
+
+    export class LineIntersectionResult {
+        constructor(
+            public status: ELineIntersectionResult,
+            public pos: Vec2 = null) { }
+    }
+
+    export class LineSegment {
+        constructor(public A: Vec2 = null, public B: Vec2 = null, ref = false) {
+            if (A && !ref) { this.A = this.A.clone(); }
+            if (B && !ref) { this.B = this.B.clone(); }
+            if (!this.A) { this.A = new Vec2() }
+            if (!this.B) { this.B = new Vec2() }
+        }
+
+        public static CalcIntersection(N: LineSegment, M: LineSegment): LineIntersectionResult {
+            const a = Vec2.SubToRef(N.B, N.A, new Vec2());
+            const b = Vec2.SubToRef(M.B, M.A, new Vec2());
+
+            if (Vec2.Dot(a, b) === Fx.zeroFx8) {
+                // A and B are parallel
+
+                // TODO: calc coincident type
+
+                return new LineIntersectionResult(ELineIntersectionResult.TRUE_PARALLEL);
+            } else {
+                const u1 = Vec2.SubToRef(M.A, N.A, new Vec2());
+                const s = Fx.div(Vec2.Dot(b, u1), Vec2.Dot(b, a));
+                const p = new Vec2();
+                Vec2.AddToRef(N.A, Vec2.ScaleToRef(a, s, p), p);
+
+                // TODO: calc intersection type
+
+                //const u2 = Vec2.SubToRef(a0, b0, new Vec2());
+                //const t = Vec2.Dot(a, u2);
+
+                return new LineIntersectionResult(ELineIntersectionResult.INTERSECTION_INSIDE_SEGMENT, p);
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ namespace mech {
             this.warsSprite = new affine.ImageSprite(this, "imgTitleWars");
             this.warsSprite.xfrm.localPos.x = Fx8(affine.Screen.SCREEN_RIGHT + (this.warsSprite.img.width >> 1));
             this.warsSprite.xfrm.localPos.y = Fx8(Fx.toFloat(this.mechSprite.xfrm.localPos.y) + this.mechSprite.img.height + 2);
+            //this.warsSprite.xfrm.localScl = Fx8(2);
 
             this.mechAnimIn = new affine.Animation<affine.Vec2>((value: affine.Vec2) => this.mechAnimPosCallback(value));
             this.mechAnimIn.addFrame(new affine.EaseFrame_Vec2(
